@@ -143,18 +143,14 @@ class Experiment:
                 label = label.cpu().numpy()
                 all_labels.append(label)
 
-                # 初始化预测容器
                 if not all_preds_dict:
                     all_preds_dict = {"mixture": []}
                     for m in output.get("modal_predictions", {}).keys():
                         all_preds_dict[m] = []
 
-                # 记录预测值
                 all_preds_dict["mixture"].append(output["mixture_prediction"].cpu().numpy())
                 for m, pred_tensor in output.get("modal_predictions", {}).items():
                     all_preds_dict[m].append(pred_tensor.cpu().numpy())
-
-        # 拼接所有标签
         all_labels = np.concatenate(all_labels, axis=0)
 
         logger.info(f"Test Model: {self.config.test_model}")
@@ -264,7 +260,6 @@ class Experiment:
             retrieval_num=self.config.retrieval_num,
             rerank_experts=self.config.num_experts
         )
-        # 移到设备
         model = model.to(self.config.device)
         optim = torch.optim.Adam(model.parameters(), lr=self.config.lr)
         return model, optim
@@ -291,7 +286,6 @@ class Experiment:
 
         avg_train_loss = total_train_loss / total_train_samples if total_train_samples > 0 else float("inf")
 
-        # ------------------ 验证 ------------------
         model.eval()
         total_val_loss = 0.0
         total_val_samples = 0
@@ -303,8 +297,6 @@ class Experiment:
                 batch = [b.to(self.config.device) if isinstance(b, torch.Tensor) else b for b in batch]
                 output, label = self._forward_modalities(model, batch)
 
-                # loss
-                # val_loss, _ = model.calculate_loss(**output, label=label, epoch=epoch)
                 joint_loss, mixture_loss = model.calculate_loss(**output, label=label, epoch=epoch)
                 batch_size = label.size(0)
                 total_val_loss += joint_loss.item() * batch_size

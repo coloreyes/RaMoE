@@ -639,7 +639,6 @@ class INSDataset(UGCDataset):
             pic_name_list = eval(meta_data['image_list'][i])
             user_name = meta_data['username'][i]
             
-            # 读取用户数据 JSON 文件
             with open(f"{json_path}/{user_data_json_path}", 'r', encoding='UTF-8') as json_file:
                 user_data = json.load(json_file)
                 label = user_data["edge_media_preview_like"]["count"]
@@ -648,15 +647,6 @@ class INSDataset(UGCDataset):
                 comment_num = user_data["edge_media_to_comment"]["count"]
                 user_id = user_data["owner"]["id"]
                 taken_at_timestamp = user_data["taken_at_timestamp"]
-
-            # for pic_name in pic_name_list:
-            #     image_id_list.append(pic_name)
-            #     label_list.append(label)
-            #     text_list.append(caption)
-            #     comment_num_list.append(comment_num)
-            #     user_id_list.append(user_id)
-            #     taken_timestamp_list.append(taken_at_timestamp)
-            #     user_name_list.append(user_name)
 
             if len(pic_name_list) > 0:
                 image_id_list.append(pic_name_list[0])
