@@ -19,11 +19,9 @@ if __name__ == '__main__':
     parser.add_argument("--seed", default=2025, type=int,
                         help="Random seed.")
 
-    parser.add_argument("--moe_model", default="ACMoE", type=str,
+    parser.add_argument("--moe_model", default="RaMoE", type=str,
                         choices=[
-                            "MultiMoe",
-                            "ACMoE",
-                            "ACMoEWOR"
+                            "RaMoE"
                         ],
                         help="Model type to use.")
     parser.add_argument("--num_experts", default=3, type=int,
